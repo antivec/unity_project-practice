@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterAniControll : MonoBehaviour {
+public class MonsterAniControl : MonoBehaviour {
     Animator m_animator;
     Monster m_monster;
 	// Use this for initialization
@@ -15,8 +15,5 @@ public class MonsterAniControll : MonoBehaviour {
         m_monster.m_state = Monster.MonsterState.IDLE;
         m_animator.SetInteger("state", (int)m_monster.m_state);
     }
-    // Update is called once per frame
-    void Update () {
-		
-	}
+
 }

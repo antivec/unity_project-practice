@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour {
     float m_speed = 7f;    
-	// Use this for initialization
-	void Start () {
-		
-	}
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "wall_top" || collision.tag == "monster")

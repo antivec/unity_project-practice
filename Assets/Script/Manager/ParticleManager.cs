@@ -41,8 +41,5 @@ public class ParticleManager : SingletonMonoBehaviour<ParticleManager> {
         effect.gameObject.SetActive(false);
         m_particlePool.push(effect);
     }
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 }

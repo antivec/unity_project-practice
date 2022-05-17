@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class Monster : MonoBehaviour {
+public class Monster : MonoBehaviour
+{
     public enum MonsterState
     {
         IDLE = 0,
@@ -13,6 +14,7 @@ public class Monster : MonoBehaviour {
         Normal_White = 0,
         Normal_Yellow,
         Normal_Pink,
+        Normal_Bomb,
         Max
     }
     public enum MonsterParts
@@ -25,12 +27,14 @@ public class Monster : MonoBehaviour {
     }
     private Animator m_animator;
     public MonsterState m_state { get; set; }
+    public int m_lineNum { get; set; }
+    public bool m_isAlive { get; set; }
     private int m_life;
-    private MonsterType m_type;
-    private float m_speed = 2.0f;
+    public MonsterType m_type { get; set; }
+    public float m_speed { get; set; }
     [SerializeField]
     private SpriteRenderer[] m_renderer;
-
+    private Sprite m_normalEyeSpr;
     private void ChangeMonsterParts(Sprite[] parts)
     {
         for (int i = 0; i < m_renderer.Length; i++)
@@ -45,42 +49,69 @@ public class Monster : MonoBehaviour {
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "bullet")
+        if (collision.CompareTag("bullet")|| collision.CompareTag("Invincible"))
         {
             m_state = MonsterState.DAMAGE;
             m_animator.SetInteger("state", (int)m_state);
-            if (--m_life <= 0)
+            if (collision.CompareTag("bullet") ) m_life -= PlayerManager.Instance.m_power;
+            else m_life = 0;
+            if (m_life <= 0)
             {
-                SetDie();
+                if (m_type != MonsterType.Normal_Bomb)
+                    SetDie();
+                else
+                    MonsterManager.Instance.DeleteMonsterLine(m_lineNum);
             }
         }
-        if(collision.tag == "wall_bottom")
+        if (collision.CompareTag("Player"))
+        {
+            //PlayerDataManager.Instance.IncreaseCoin(Player.Instance.m_coin);
+            //PlayerDataManager.Instance.SetScore(Player.Instance.m_score);
+            //PlayerDataManager.Instance.SaveData();
+            //LoadSceneManager.Instance.LoadLevelAsync("Lobby", LoadSceneManager.eState.Lobby);
+        }
+        if (collision.CompareTag("wall_bottom"))
         {
             MonsterManager.Instance.RemoveMonster(this);
         }
     }
-    public void SetDie()
+    public void SetDieEffect()
     {
-        gameObject.SetActive(false);
+        PlayerManager.Instance.m_iScore += 50;
         ParticleManager.Instance.OnEffect(transform.position);
         ItemManager.Instance.CreateItem(transform.position);
         SoundManager.Instance.PlaySFX(SoundManager.SFX_CLIP.Mon_Die);
-        MonsterManager.Instance.RemoveMonster(this);        
-    }    
+    }
+    public void SetDie()
+    {
+        SetDieEffect();
+        MonsterManager.Instance.RemoveMonster(this);
+    }
     public void InitMonster(int life, MonsterType type)
     {
         m_life = life;
         m_type = type;
-        var parts = MonsterManager.Instance.GetMonsterParts(type);
+        m_isAlive = true;
+        m_speed = MonsterManager.Instance.m_curSpeed;
+        var parts = MonsterManager.Instance.GetMonsterParts(type);   
         ChangeMonsterParts(parts);
     }
+    public void SetIdleSprite()
+    {
+        //Debug.Log(m_normalEyeSpr.name);
+        m_renderer[(int)MonsterParts.Eye_Right].sprite = m_renderer[(int)MonsterParts.Eye_Left].sprite = m_normalEyeSpr;
+    }
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         m_state = MonsterState.IDLE;
         m_animator = GetComponentInChildren<Animator>();
-    }	
-	// Update is called once per frame
-	void Update () {
+        m_normalEyeSpr = m_renderer[3].sprite;
+        m_speed = 2.0f;
+    }
+    // Update is called once per frame
+    void Update()
+    {
         gameObject.transform.position += Vector3.down * m_speed * Time.deltaTime;
 
     }

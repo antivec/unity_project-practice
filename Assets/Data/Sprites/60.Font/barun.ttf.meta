@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 3742bc73dd1876143a87620f446e892f
+timeCreated: 1491898555
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: BareunDotum
+  fontNames:
+  - BareunDotum
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
