@@ -19,7 +19,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
     [SerializeField]
     GameObject m_monsterObject;
     [SerializeField]
-    MonsterSprite[] m_sprits;
+    MonsterSprite[] m_sprites;
     [SerializeField]
     int m_count = 5;
     Vector3 m_startPos = new Vector3(-1.36f, 4.5f);
@@ -111,6 +111,11 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
         }
         m_monsterList.RemoveAll(element => element.m_isAlive == false);
     }
+    public void StopMonsterLine()
+    {
+        Debug.Log("Stop called");
+        CancelInvoke("CreateMonsters");
+    }
     public void SetMonsterSpeedInvincible(float magpower)
     {
         m_curSpeed *= magpower;
@@ -135,7 +140,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
     }
     public Sprite[] GetMonsterParts(Monster.MonsterType type)
     {
-        return m_sprits[(int)type].m_spriteArray;
+        return m_sprites[(int)type].m_spriteArray;
     }
     // Update is called once per frame
 

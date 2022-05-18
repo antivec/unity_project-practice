@@ -105,7 +105,7 @@ public class Item : MonoBehaviour
         {
             SetMagnetEffect();
         }
-        if (collision.CompareTag("wall_bottom"))
+        if (collision.CompareTag("wall_floor"))
         {
             ItemManager.Instance.RemoveItem(this);
         }

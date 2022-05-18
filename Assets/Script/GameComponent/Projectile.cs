@@ -7,7 +7,7 @@ public class Projectile : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "wall_top" || collision.tag == "monster")
+        if (collision.CompareTag("wall_top") || collision.CompareTag("monster"))
             PlayerManager.Instance.RemoveProjectile(this);        
     }
     // Update is called once per frame

@@ -49,6 +49,11 @@ public class Monster : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.CompareTag("wall_floor") )
+        {
+            MonsterManager.Instance.RemoveMonster(this);
+        }
+
         if (collision.CompareTag("bullet")|| collision.CompareTag("Invincible"))
         {
             m_state = MonsterState.DAMAGE;
@@ -63,21 +68,36 @@ public class Monster : MonoBehaviour
                     MonsterManager.Instance.DeleteMonsterLine(m_lineNum);
             }
         }
-        if (collision.CompareTag("Player"))
+        if(collision.CompareTag("Player") && !GameManager.Instance.isInvincible)
         {
-            //PlayerDataManager.Instance.IncreaseCoin(Player.Instance.m_coin);
-            //PlayerDataManager.Instance.SetScore(Player.Instance.m_score);
-            //PlayerDataManager.Instance.SaveData();
-            //LoadSceneManager.Instance.LoadLevelAsync("Lobby", LoadSceneManager.eState.Lobby);
+            PlayerManager.Instance.setDamaged();
+            Debug.Log("Damaged!!");
         }
-        if (collision.CompareTag("wall_bottom"))
+    }
+    public int SetMonsterScore(MonsterType type)
+    {
+        int score = 0;
+        switch (type)
         {
-            MonsterManager.Instance.RemoveMonster(this);
+            case MonsterType.Normal_Yellow:
+                score = 10;
+                break;
+              
+            case MonsterType.Normal_Pink:
+                score = 20;
+                break;
+            case MonsterType.Normal_White:
+                score = 30;
+                break;
+            case MonsterType.Normal_Bomb:
+                score = 5;
+                break;
         }
+        return score;
     }
     public void SetDieEffect()
     {
-        PlayerManager.Instance.m_iScore += 50;
+        PlayerManager.Instance.m_iScore += SetMonsterScore(m_type);
         ParticleManager.Instance.OnEffect(transform.position);
         ItemManager.Instance.CreateItem(transform.position);
         SoundManager.Instance.PlaySFX(SoundManager.SFX_CLIP.Mon_Die);
@@ -93,7 +113,7 @@ public class Monster : MonoBehaviour
         m_type = type;
         m_isAlive = true;
         m_speed = MonsterManager.Instance.m_curSpeed;
-        var parts = MonsterManager.Instance.GetMonsterParts(type);   
+        var parts = MonsterManager.Instance.GetMonsterParts(type);
         ChangeMonsterParts(parts);
     }
     public void SetIdleSprite()

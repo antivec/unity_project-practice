@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
      
     [SerializeField]
@@ -21,6 +22,8 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
     Text m_coinLabel;
     [SerializeField]
     Text m_scoreLabel;
+
+
     List<Projectile> m_projectileList;
     GameObjectPool<GameObject> m_projectile_Pool;
     Animation m_animation;    
@@ -33,10 +36,13 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
 
     bool m_col_left, m_col_right;
     bool m_clickOn;
-    public float m_dist;
+    float m_dist;
     public int m_iScore;
+    int m_playerLife;
+
     protected override void OnStart() {
         int num = 0;
+
         m_projectile_Pool = new GameObjectPool<GameObject>(10, () =>
         {
             ++num;
@@ -51,6 +57,7 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
         m_magnetEffect.SetActive(false);
         m_animation = GetComponent<Animation>();
         Invoke("OnShoot", 3f);
+        m_playerLife = 3;
         m_power = 1;
         m_dist = 0;
         m_coin = 0;
@@ -69,7 +76,7 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
 
         Projectile item = obj.GetComponent<Projectile>();           
         m_projectileList.Add(item);
-        Invoke("OnShoot", 0.1f);
+        Invoke("OnShoot", 0.3f);
     }
     public void RemoveProjectile(Projectile projectile)
     {
@@ -102,6 +109,22 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
         m_invincibleEffect.SetActive(false);
         m_animation.CrossFade("fly");
         OnShoot();
+    }
+    public void setDamaged()
+    {
+        if(m_playerLife > 1) 
+        {
+            m_playerLife -= 1;
+            Hearts.Instance.ModifyHeart(m_playerLife);
+        }
+        else
+        {
+            m_playerLife = 0;
+            Hearts.Instance.ModifyHeart(m_playerLife);
+            CancelInvoke("OnShoot");
+            GameManager.Instance.SetGameState(GameManager.GameState.GameOver);
+            this.gameObject.SetActive(false);
+        }
     }
     Vector3 startPos;
     Vector3 targetPos;
