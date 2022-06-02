@@ -95,7 +95,7 @@ public class Item : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player")  || collision.CompareTag("Invincible"))
+        if (collision.CompareTag("Player")  || collision.CompareTag("Invincible") || collision.CompareTag("Damaged_Invincible"))
         {
             ItemManager.Instance.RemoveItem(this);
             PlayItemGetSound();

@@ -12,6 +12,10 @@ public class ItemManager : SingletonMonoBehaviour<ItemManager>
     GameObjectPool<Item> m_itemPool;
     List<Item> m_itemList;
     int[] m_itemProbability = new int[] { 60, 6, 2, 1, 12, 19 };
+    public void setItemPool()
+    {
+        SelectItem();
+    }
     protected override void OnStart()
     {
         base.OnStart();

@@ -30,7 +30,7 @@ public class Hearts : SingletonMonoBehaviour<Hearts>
     {
        
     }
-    void InitializeHeart()
+    public void InitializeHeart()
     {
         for (int i = 0; i < heart_list.Length; i++)
         {

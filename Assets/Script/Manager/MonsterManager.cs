@@ -29,9 +29,14 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
     public float m_curSpeed { get; set; }
     float m_respawnInterval = 8.0f;
     // Use this for initialization
+    public void SetUpPool()
+    {
+        ResetCreateMonster();
+    }
     protected override void OnStart()
     {
         base.OnStart();
+
         int number = 0;
         m_monsterPool = new GameObjectPool<Monster>(10, () =>
         {
@@ -77,7 +82,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
             //Debug.Log("Monster[" + i + "].position : " +mon.gameObject.transform.position);            
             m_monsterList.Add(mon);
         }
-        Debug.Log(m_monsterList.Count);
+        //Debug.Log(m_monsterList.Count);
         Invoke("CreateMonsters", m_respawnInterval / m_curSpeed);
     }
     public void ResetCreateMonster()

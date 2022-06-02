@@ -23,7 +23,6 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
     [SerializeField]
     Text m_scoreLabel;
 
-
     List<Projectile> m_projectileList;
     GameObjectPool<GameObject> m_projectile_Pool;
     Animation m_animation;    
@@ -33,26 +32,27 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
 
     public int m_power { get; set; }
     public int m_coin { get; set; }
-
+    public float m_dist { get; set; }
     bool m_col_left, m_col_right;
     bool m_clickOn;
-    float m_dist;
+
     public int m_iScore;
     int m_playerLife;
-
-    protected override void OnStart() {
+    public void InitiateGame()
+    {
         int num = 0;
-
+        this.gameObject.SetActive(true);
         m_projectile_Pool = new GameObjectPool<GameObject>(10, () =>
         {
             ++num;
-            GameObject obj = Instantiate(m_projectile) as GameObject;            
-            obj.name = "bullet" + num;            
-            obj.transform.parent = m_bulletPool.transform;            
+            GameObject obj = Instantiate(m_projectile) as GameObject;
+            obj.name = "bullet" + num;
+            obj.transform.parent = m_bulletPool.transform;
             return obj;
         });
         SoundManager.Instance.PlayBGM(SoundManager.BGM_CLIP.BGM_01);
-        m_projectileList = new List<Projectile>();
+        if(m_projectileList == null)
+            m_projectileList = new List<Projectile>();
         m_invincibleEffect.SetActive(false);
         m_magnetEffect.SetActive(false);
         m_animation = GetComponent<Animation>();
@@ -60,9 +60,18 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
         m_playerLife = 3;
         m_power = 1;
         m_dist = 0;
-        m_coin = 0;
+        if (PlayerPrefs.GetInt("Player_Coin") > 0)
+        {
+            m_coin = PlayerPrefs.GetInt("Player_Coin");
+        }
+        else
+            m_coin = 0;
         m_iScore = 0;
-       // m_totalCoinLabel.text = string.Format("{0:n0}", PlayerDataManager.Instance.GetCoin());
+
+        // m_totalCoinLabel.text = string.Format("{0:n0}", PlayerDataManager.Instance.GetCoin());
+    }
+    protected override void OnStart() {
+        InitiateGame();
     }
     void OnShoot()
     {
@@ -76,7 +85,7 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
 
         Projectile item = obj.GetComponent<Projectile>();           
         m_projectileList.Add(item);
-        Invoke("OnShoot", 0.3f);
+        Invoke("OnShoot", 0.25f);
     }
     public void RemoveProjectile(Projectile projectile)
     {
@@ -114,8 +123,12 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
     {
         if(m_playerLife > 1) 
         {
+            this.gameObject.tag = "Damaged_Invincible";
             m_playerLife -= 1;
             Hearts.Instance.ModifyHeart(m_playerLife);
+            m_animation.CrossFade("damaged_blink");
+
+            Invoke("setRecovered", 2.0f);
         }
         else
         {
@@ -125,6 +138,12 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
             GameManager.Instance.SetGameState(GameManager.GameState.GameOver);
             this.gameObject.SetActive(false);
         }
+    }
+
+    public void setRecovered()
+    {
+        m_animation.CrossFade("fly");
+        this.gameObject.tag = "Player";
     }
     Vector3 startPos;
     Vector3 targetPos;
@@ -183,5 +202,9 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
     void Update () {
         MovePlayer();
         ProcessScore();
+    }
+    private void FixedUpdate()
+    {
+        
     }
 }

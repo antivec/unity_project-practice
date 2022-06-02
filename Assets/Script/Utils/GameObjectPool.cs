@@ -37,5 +37,9 @@ public class GameObjectPool<T> where T : class
     {
         this.objects.Push(obj);
     }
+    public int pool_count()
+    {
+        return this.objects.Count; 
+    }
 
 }

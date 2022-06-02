@@ -6,7 +6,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     //[System.Serializable]
     //public class game_ui
-    //{
+    //{s
     //    public GameObject[] UIObject;
     //    Text dist;
     //    Text score;
@@ -20,6 +20,19 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     BgScroll m_bgScroll;
     [SerializeField]
     GameObject[] inGame_UIlist;
+    [SerializeField]
+    Text m_GameOverDist;
+    [SerializeField]
+    Text m_GameOverCoin;
+    [SerializeField]
+    Text m_GameOverScore;
+    [SerializeField]
+    Text m_GameOverFinal;
+    [SerializeField]
+    Button restart_btn;
+    [SerializeField]
+    MouseCursor m_MouseCursor;
+
     public enum GameState
     {
         Normal = 0,
@@ -27,7 +40,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         Invincible
 
     }
-    GameState m_state;
+    public GameState m_state;
     bool isSet;
     public bool isInvincible = false;
     float m_InvincibleMagPower = 5.0f;
@@ -86,14 +99,53 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         m_bgScroll.m_speed = 0;
         MonsterManager.Instance.StopMonsterLine();
         isSet = false;
+        SetGameOverScore();
+        m_MouseCursor.ShowCursor();
+    }
+    private void SetGameOverScore()
+    {
+        float m_fdist = PlayerManager.Instance.m_dist;
+        int m_iScore = PlayerManager.Instance.m_iScore;
+        int m_iCoin = PlayerManager.Instance.m_coin;
+        int m_final = m_iScore + (int)m_fdist;
+
+        m_GameOverCoin.text = string.Format("{0:d}",
+            m_iCoin);
+        m_GameOverDist.text = string.Format("{0:f1} M",
+           m_fdist);
+        m_GameOverScore.text = string.Format("{0:d}",
+            m_iScore);
+        m_GameOverFinal.text = string.Format("{0:d}",
+            m_final);
+
+        PlayerPrefs.SetInt("Player_Coin", m_iCoin);
+        PlayerPrefs.SetInt("Player_Score", m_iScore);
+        PlayerPrefs.SetInt("Player_Final_Score", m_final);
+        PlayerPrefs.SetFloat("Player_Distance", m_fdist);
+        PlayerPrefs.Save();
     }
     protected override void OnStart()
     {
         base.OnStart();
         m_state = GameState.Normal;
         ChangeUIActivation();
+        restart_btn.onClick.AddListener(SetRestartStatus);
         isSet = false;
 
+    }
+
+    public void SetRestartStatus()
+    {
+        SetGameState(GameState.Normal);
+        m_bgScroll.m_speed = 0.2f;
+        ChangeUIActivation();
+        PlayerManager.Instance.InitiateGame();
+        MonsterManager.Instance.SetUpPool();
+        Hearts.Instance.InitializeHeart();
+        //ItemManager.Instance.setItemPool();
+        m_bgScroll.DoMapFadein();
+        m_MouseCursor.HideCursor();
+        isSet = false;
     }
     void Update()
     {
@@ -113,6 +165,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
             }
             ChangeUIActivation();
         }
-
+        if(PlayerManager.Instance.m_dist >= 10.0f && 
+            PlayerManager.Instance.m_dist < 10.1f)
+        {
+            Debug.Log("Map FadeOut!!");
+            m_bgScroll.DoMapFadeOut();
+        }
     }
 }
