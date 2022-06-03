@@ -16,12 +16,6 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
     GameObject m_invincibleEffect;
     [SerializeField]
     GameObject m_magnetEffect;
-    [SerializeField]
-    Text m_distLabel;
-    [SerializeField]
-    Text m_coinLabel;
-    [SerializeField]
-    Text m_scoreLabel;
 
     List<Projectile> m_projectileList;
     GameObjectPool<GameObject> m_projectile_Pool;
@@ -31,14 +25,11 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
     float m_invincibleDuration = 3f;
 
     public int m_power { get; set; }
-    public int m_coin { get; set; }
-    public float m_dist { get; set; }
     bool m_col_left, m_col_right;
     bool m_clickOn;
 
-    public int m_iScore;
-    int m_playerLife;
-    public void InitiateGame()
+    public int m_playerLife { get; set; }
+    public void InitiatePlayer()
     {
         int num = 0;
         this.gameObject.SetActive(true);
@@ -59,19 +50,10 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
         Invoke("OnShoot", 3f);
         m_playerLife = 3;
         m_power = 1;
-        m_dist = 0;
-        if (PlayerPrefs.GetInt("Player_Coin") > 0)
-        {
-            m_coin = PlayerPrefs.GetInt("Player_Coin");
-        }
-        else
-            m_coin = 0;
-        m_iScore = 0;
-
-        // m_totalCoinLabel.text = string.Format("{0:n0}", PlayerDataManager.Instance.GetCoin());
     }
+
     protected override void OnStart() {
-        InitiateGame();
+        InitiatePlayer();
     }
     void OnShoot()
     {
@@ -147,7 +129,7 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
     }
     Vector3 startPos;
     Vector3 targetPos;
-    Vector3 result;
+    //Vector3 result;
     void MovePlayer()
     {
         float dir = Input.GetAxis("Horizontal");       
@@ -191,17 +173,10 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
             m_col_right = false;            
         }
     }    
-    private void ProcessScore()
-    {
-        m_dist += Time.deltaTime * GameManager.Instance.GetInvincibleSpeed();
-        m_distLabel.text = string.Format("{0:f1} M" ,m_dist);
-        m_coinLabel.text = string.Format("{0:d}", m_coin);
-        m_scoreLabel.text = string.Format("{0:d}", m_iScore);
-    }
     // Update is called once per frame
     void Update () {
         MovePlayer();
-        ProcessScore();
+        ScoreManager.Instance.ProcessScore();
     }
     private void FixedUpdate()
     {

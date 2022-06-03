@@ -97,7 +97,7 @@ public class Monster : MonoBehaviour
     }
     public void SetDieEffect()
     {
-        PlayerManager.Instance.m_iScore += SetMonsterScore(m_type);
+        ScoreManager.Instance.m_iScore += SetMonsterScore(m_type);
         ParticleManager.Instance.OnEffect(transform.position);
         ItemManager.Instance.CreateItem(transform.position);
         SoundManager.Instance.PlaySFX(SoundManager.SFX_CLIP.Mon_Die);

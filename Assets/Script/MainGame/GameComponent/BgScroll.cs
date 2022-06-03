@@ -36,12 +36,14 @@ public class BgScroll : MonoBehaviour
         StartCoroutine("MapFadeIn");
     }
 
-    public void DoMapFadeOut()
+    public void DoMapFadeOut(StageType _stageType)
     {
-        StartCoroutine("MapFadeOut");
+        StageType stageType = _stageType;
+        StartCoroutine("MapFadeOut",stageType);
     }
    public IEnumerator MapFadeIn()
      {
+        Debug.Log("FadeIn called!");
           Color lerp_Color;
           float m_lerpTime = 0.0f;
         if(m_material.GetColor("_TintColor") == Color.gray)
@@ -57,10 +59,18 @@ public class BgScroll : MonoBehaviour
                 yield return new WaitForFixedUpdate();
            }
            Debug.Log("End of Coroutine ");
-           yield return null;
-     }
 
-    IEnumerator MapFadeOut()
+        yield return null;
+        if (GameManager.Instance != null)
+        {
+            if (!GameManager.Instance.isTimetoChangeMap)
+            {
+                GameManager.Instance.isTimetoChangeMap = true;
+            }
+        }
+    }
+
+    IEnumerator MapFadeOut(StageType stageType)
     {
         Color lerp_Color;
         float m_lerpTime = 0.0f;
@@ -75,6 +85,7 @@ public class BgScroll : MonoBehaviour
         }
 
         Debug.Log("End of Coroutine (FADEOUT) ");
+        ChangeMapTexture(stageType);
         yield return StartCoroutine("MapFadeIn");
     }
 

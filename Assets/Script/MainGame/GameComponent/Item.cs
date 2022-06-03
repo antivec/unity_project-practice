@@ -12,7 +12,8 @@ public class Item : MonoBehaviour
         Gem_Green,
         Gem_Blue,
         Invincible,
-        Magnet
+        Magnet,
+        HeartRecover
 
     }
     [SerializeField]
@@ -80,16 +81,25 @@ public class Item : MonoBehaviour
                 PlayerManager.Instance.SetMagnet();
                 break;
             case ItemType.Coin:
-                PlayerManager.Instance.m_coin++;
+                ScoreManager.Instance.m_coin++;
                 break;
             case ItemType.Gem_Red:
-                PlayerManager.Instance.m_coin += 10;
+                ScoreManager.Instance.m_coin += 10;
                 break;
             case ItemType.Gem_Green:
-                PlayerManager.Instance.m_coin += 20;
+                ScoreManager.Instance.m_coin += 20;
                 break;
             case ItemType.Gem_Blue:
-                PlayerManager.Instance.m_coin += 30;
+                ScoreManager.Instance.m_coin += 30;
+                break;
+            case ItemType.HeartRecover:
+                if (PlayerManager.Instance.m_playerLife < 3)
+                {
+                    PlayerManager.Instance.m_playerLife++;
+                    Hearts.Instance.RegenerateHeart(PlayerManager.Instance.m_playerLife);
+                }
+
+                    
                 break;
         }
     }

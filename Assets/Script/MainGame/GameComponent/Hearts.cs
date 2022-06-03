@@ -28,7 +28,6 @@ public class Hearts : SingletonMonoBehaviour<Hearts>
     // Update is called once per frame
     void Update()
     {
-       
     }
     public void InitializeHeart()
     {
@@ -42,5 +41,10 @@ public class Hearts : SingletonMonoBehaviour<Hearts>
     {
         heart_list[idx].heart_containter.GetComponent<SpriteRenderer>()
             .sprite = heart_sprites[(int)HeartStatus.empty];    
+    }
+    public void RegenerateHeart(int idx)
+    {
+        heart_list[idx -1].heart_containter.GetComponent<SpriteRenderer>()
+    .sprite = heart_sprites[(int)HeartStatus.filled];
     }
 }
