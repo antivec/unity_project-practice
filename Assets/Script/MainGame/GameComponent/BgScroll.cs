@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 public class BgScroll : MonoBehaviour
@@ -41,11 +42,13 @@ public class BgScroll : MonoBehaviour
         StageType stageType = _stageType;
         StartCoroutine("MapFadeOut",stageType);
     }
+
    public IEnumerator MapFadeIn()
-     {
-        Debug.Log("FadeIn called!");
+   {    
+        //Debug.Log("FadeIn called!");
           Color lerp_Color;
           float m_lerpTime = 0.0f;
+          var yield_Fixed = new WaitForFixedUpdate();
         if(m_material.GetColor("_TintColor") == Color.gray)
         {
             m_material.SetColor("_TintColor", Color.black);
@@ -56,9 +59,9 @@ public class BgScroll : MonoBehaviour
                 lerp_Color = Color.Lerp(Color.black, Color.gray, m_lerpTime);
                 m_material.SetColor("_TintColor", lerp_Color);
 
-                yield return new WaitForFixedUpdate();
+                yield return yield_Fixed;
            }
-           Debug.Log("End of Coroutine ");
+           //Debug.Log("End of Coroutine ");
 
         yield return null;
         if (GameManager.Instance != null)
@@ -68,23 +71,24 @@ public class BgScroll : MonoBehaviour
                 GameManager.Instance.isTimetoChangeMap = true;
             }
         }
-    }
+   }
 
     IEnumerator MapFadeOut(StageType stageType)
     {
         Color lerp_Color;
         float m_lerpTime = 0.0f;
         Color Current_BGColor = m_material.GetColor("_TintColor");
+        var yield_Fixed = new WaitForFixedUpdate();
         while (m_lerpTime < 1.0f)
         {
             m_lerpTime += (Time.deltaTime * m_speed);
             lerp_Color = Color.Lerp(Current_BGColor, Color.black, m_lerpTime);
             m_material.SetColor("_TintColor", lerp_Color);
 
-            yield return new WaitForFixedUpdate();
+            yield return yield_Fixed;
         }
 
-        Debug.Log("End of Coroutine (FADEOUT) ");
+        //Debug.Log("End of Coroutine (FADEOUT) ");
         ChangeMapTexture(stageType);
         yield return StartCoroutine("MapFadeIn");
     }

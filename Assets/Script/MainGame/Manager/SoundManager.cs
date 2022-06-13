@@ -25,6 +25,9 @@ public class SoundManager : SingletonMonoBehaviour<SoundManager> {
     AudioClip[] m_sfxClip;
     [SerializeField]
     AudioClip[] m_bgmClip;
+
+    float m_fBGM_Volume;
+
     protected override void OnStart()
     {
         base.OnStart();
@@ -38,9 +41,15 @@ public class SoundManager : SingletonMonoBehaviour<SoundManager> {
         m_audio[(int)AudioType.SFX].playOnAwake = false;
         m_audio[(int)AudioType.SFX].rolloffMode = AudioRolloffMode.Linear;
 
+        if (PlayerPrefs.HasKey("BGM_Volume"))
+        {
+            m_fBGM_Volume = PlayerPrefs.GetFloat("BGM_Volume");
+            SetVolumeBGM(m_fBGM_Volume);
+        }
+
     }
     public void SetVolumeBGM(float volume)
-    {        
+    {
         m_audio[(int)AudioType.BGM].volume = volume;        
     }
     public void SetVolumeSFX(float volume)
@@ -89,8 +98,4 @@ public class SoundManager : SingletonMonoBehaviour<SoundManager> {
             m_audio[i].Stop();
         }
     }
-    // Update is called once per frame
-    void Update () {
-		
-	}
 }

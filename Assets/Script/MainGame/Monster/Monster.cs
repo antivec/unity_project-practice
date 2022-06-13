@@ -71,7 +71,7 @@ public class Monster : MonoBehaviour
         if(collision.CompareTag("Player") && !GameManager.Instance.isInvincible)
         {
             PlayerManager.Instance.setDamaged();
-            Debug.Log("Damaged!!");
+            //Debug.Log("Damaged!!");
         }
     }
     public int SetMonsterScore(MonsterType type)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     [SerializeField]
@@ -10,6 +11,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     GameObject[] inGame_UIlist;
     [SerializeField]
     Button restart_btn;
+    [SerializeField]
+    Button Home_btn;
     [SerializeField]
     MouseCursor m_MouseCursor;
 
@@ -25,6 +28,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public bool isInvincible = false;
     float m_InvincibleMagPower = 5.0f;
     public bool isTimetoChangeMap;
+
     void ChangeUIActivation()
     {
         if(m_state == GameState.Normal)
@@ -37,6 +41,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
             inGame_UIlist[(int)GameState.Normal].SetActive(false);
             inGame_UIlist[(int)GameState.GameOver].SetActive(true);
         }
+    }
+
+    private void InitializeBtnAction()
+    {
+        restart_btn.onClick.AddListener(SetRestartStatus);
+        Home_btn.onClick.AddListener(SetHomeMenu);
     }
 
     public GameState GetGameState()
@@ -86,10 +96,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     protected override void OnStart()
     {
         base.OnStart();
+        //float m_PlayerBGM_Vol = PlayerPrefs.GetFloat("BGM_Volume");
+        //SoundManager.Instance.SetVolume(m_PlayerBGM_Vol);
         m_state = GameState.Normal;
-        restart_btn.onClick.AddListener(SetRestartStatus);
+        InitializeBtnAction();
         isSet = false;
         isTimetoChangeMap = true;
+        ChangeUIActivation();
     }
 
     public void SetRestartStatus()
@@ -104,6 +117,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         m_bgScroll.DoMapFadein();
         m_MouseCursor.HideCursor();
         isSet = false;
+    }
+    public void SetHomeMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
     void Update()
     {
@@ -131,13 +148,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         {
             isTimetoChangeMap = false;
             m_bgScroll.DoMapFadeOut(BgScroll.StageType.Stage2);
-            Debug.Log("FadeOut Called!");
+            //Debug.Log("FadeOut Called!");
         }
         if (((i_dist >= 40 && i_dist < 41) && isTimetoChangeMap))
         {
             isTimetoChangeMap = false;
             m_bgScroll.DoMapFadeOut(BgScroll.StageType.Stage3);
-            Debug.Log("FadeOut2 Called!");
+            //Debug.Log("FadeOut2 Called!");
         }
     }
     void FixedUpdate()

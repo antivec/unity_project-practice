@@ -24,11 +24,6 @@ public class Hearts : SingletonMonoBehaviour<Hearts>
     {
         InitializeHeart();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
     public void InitializeHeart()
     {
         for (int i = 0; i < heart_list.Length; i++)

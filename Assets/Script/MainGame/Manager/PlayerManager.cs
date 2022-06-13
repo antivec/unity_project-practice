@@ -178,8 +178,4 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
         MovePlayer();
         ScoreManager.Instance.ProcessScore();
     }
-    private void FixedUpdate()
-    {
-        
-    }
 }

@@ -104,7 +104,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
     }
     public void DeleteMonsterLine(int lineNum)
     {
-        Debug.Log("DeleteMonsterLine: " + m_monsterList.Count + "LineNum : " + lineNum);
+        //Debug.Log("DeleteMonsterLine: " + m_monsterList.Count + "LineNum : " + lineNum);
         for (int i = 0; i < m_monsterList.Count; i++)
         {
             if (m_monsterList[i].gameObject.activeSelf && m_monsterList[i].m_lineNum == lineNum)
@@ -118,7 +118,7 @@ public class MonsterManager : SingletonMonoBehaviour<MonsterManager>
     }
     public void StopMonsterLine()
     {
-        Debug.Log("Stop called");
+        //Debug.Log("Stop called");
         CancelInvoke("CreateMonsters");
     }
     public void SetMonsterSpeedInvincible(float magpower)
