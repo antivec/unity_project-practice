@@ -21,7 +21,7 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
     GameObjectPool<GameObject> m_projectile_Pool;
     Animation m_animation;    
 
-    float m_speed = 5f;
+    //float m_speed = 5f;
     float m_invincibleDuration = 3f;
 
     public int m_power { get; set; }
@@ -101,7 +101,7 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
         m_animation.CrossFade("fly");
         OnShoot();
     }
-    public void setDamaged()
+    public void SetDamaged()
     {
         if(m_playerLife > 1) 
         {
@@ -122,7 +122,7 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
         }
     }
 
-    public void setRecovered()
+    public void SetRecovered()
     {
         m_animation.CrossFade("fly");
         this.gameObject.tag = "Player";
@@ -176,6 +176,5 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager> {
     // Update is called once per frame
     void Update () {
         MovePlayer();
-        ScoreManager.Instance.ProcessScore();
     }
 }

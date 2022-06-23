@@ -67,11 +67,16 @@ public class ScoreManager : SingletonMonoBehaviour<ScoreManager>
         PlayerPrefs.SetFloat("Player_Distance", m_dist);
         PlayerPrefs.Save();
     }
-    public void ProcessScore()
+    void ProcessScore()
     {
         m_dist += Time.deltaTime * GameManager.Instance.GetInvincibleSpeed();
         m_distLabel.text = string.Format("{0:f1} M", m_dist);
         m_coinLabel.text = string.Format("{0:d}", m_coin);
         m_scoreLabel.text = string.Format("{0:d}", m_iScore);
+    }
+
+    private void Update()
+    {
+        ProcessScore();
     }
 }

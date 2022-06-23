@@ -52,6 +52,7 @@ public class GameMenuManager : MonoBehaviour
 
         m_ButtonList.GamePlayBtn.onClick.AddListener(PlayGame);
         m_ButtonList.OptionBtn.onClick.AddListener(OpenOptionMenu);
+        m_ButtonList.ShopBtn.onClick.AddListener(ShopMenu);
     }
 
     void PlayGame()
@@ -63,6 +64,10 @@ public class GameMenuManager : MonoBehaviour
         UI_Object[(int)UIType.Option].SetActive(true);
     }
     // Update is called once per frame
+    void ShopMenu()
+    {
+        UI_Object[(int)UIType.Shop].SetActive(true);
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0) && !isEntranceProceed)

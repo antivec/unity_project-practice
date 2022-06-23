@@ -17,12 +17,13 @@ public class BgScroll : MonoBehaviour
     public float m_speed { get; set; }
     Material m_material;
     public Texture[] m_MapTexture;
-    public bool isMapChange = false;
+    public bool isMapReset= false;
     // Use this for initialization
     void Start()
     {
         var renderer = GetComponent<Renderer>();
         m_material = renderer.material ;
+
         //float progression = Mathf.PingPong(Time.deltaTime,Color.gray);
         StartCoroutine("MapFadeIn");
          m_speed = 0.2f;
@@ -32,8 +33,9 @@ public class BgScroll : MonoBehaviour
         m_material.mainTexture = m_MapTexture[(int)stageType];
        
     }
-    public void DoMapFadein()
+    public void DoMapFadein(bool _flag)
     {
+        isMapReset = _flag;
         StartCoroutine("MapFadeIn");
     }
 
@@ -58,9 +60,9 @@ public class BgScroll : MonoBehaviour
                 m_lerpTime += (Time.deltaTime * m_speed);
                 lerp_Color = Color.Lerp(Color.black, Color.gray, m_lerpTime);
                 m_material.SetColor("_TintColor", lerp_Color);
-
+                //yield return new WaitForFixedUpdate();
                 yield return yield_Fixed;
-           }
+        }
            //Debug.Log("End of Coroutine ");
 
         yield return null;
@@ -85,6 +87,7 @@ public class BgScroll : MonoBehaviour
             lerp_Color = Color.Lerp(Current_BGColor, Color.black, m_lerpTime);
             m_material.SetColor("_TintColor", lerp_Color);
 
+            //yield return new WaitForFixedUpdate();
             yield return yield_Fixed;
         }
 
@@ -103,4 +106,5 @@ public class BgScroll : MonoBehaviour
 
         }
     }
+   
 }

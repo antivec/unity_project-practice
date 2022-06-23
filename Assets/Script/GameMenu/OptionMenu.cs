@@ -37,7 +37,7 @@ public class OptionMenu : MonoBehaviour
     WarningPopup m_WarningPopup;
 
     float m_fBGM_Vol = -1.0f;
-    bool isPopUp = false;
+    //bool isPopUp = false;
 
     private void Start()
     {
@@ -79,10 +79,6 @@ public class OptionMenu : MonoBehaviour
             m_BGMSlider.value = m_AudioSrc.volume;
     }
 
-    //void Update()
-    //{
-    //    //ApplySettingNumber();
-    //}
 
     void ApplyBGMNumber()
     {

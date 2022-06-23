@@ -70,7 +70,7 @@ public class Monster : MonoBehaviour
         }
         if(collision.CompareTag("Player") && !GameManager.Instance.isInvincible)
         {
-            PlayerManager.Instance.setDamaged();
+            PlayerManager.Instance.SetDamaged();
             //Debug.Log("Damaged!!");
         }
     }

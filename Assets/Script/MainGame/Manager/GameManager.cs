@@ -107,6 +107,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void SetRestartStatus()
     {
+        bool restartFlag = true;
         SetGameState(GameState.Normal);
         m_bgScroll.m_speed = 0.2f;
         ChangeUIActivation();
@@ -114,7 +115,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         ScoreManager.Instance.InitiateScore();
         MonsterManager.Instance.SetUpPool();
         Hearts.Instance.InitializeHeart();
-        m_bgScroll.DoMapFadein();
+        m_bgScroll.DoMapFadein(restartFlag);
         m_MouseCursor.HideCursor();
         isSet = false;
     }
