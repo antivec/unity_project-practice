@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -33,7 +35,7 @@ public class GameMenuManager : MonoBehaviour
         Chara_03,
         Chara_04
     }
-
+    
     [Header("UI")]
     [SerializeField]
     GameObject[] UI_Object;
@@ -44,8 +46,10 @@ public class GameMenuManager : MonoBehaviour
     public ButtonList m_ButtonList;
     public bool isEntranceProceed = false;
     // Start is called before the first frame update
+   
     void Start()
     {
+        
         SoundManager.Instance.PlayBGM(SoundManager.BGM_CLIP.BGM_01);
         UI_Object[(int)UIType.Entrance].SetActive(true);
         UI_Object[(int)UIType.Option].SetActive(false);
